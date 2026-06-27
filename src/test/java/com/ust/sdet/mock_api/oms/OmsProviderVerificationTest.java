@@ -27,7 +27,7 @@ public class OmsProviderVerificationTest {
         wireMockServer = new WireMockServer(8080);
         wireMockServer.start();
 
-        configureFor("localhost",8080);
+        configureFor("127.0.0.1",8080);
     }
 
     @AfterAll
@@ -36,9 +36,9 @@ public class OmsProviderVerificationTest {
     }
 
     @BeforeEach
-    void before(PactVerificationContext context) {
+    void setup(PactVerificationContext context) {
 
-        context.setTarget(new HttpTestTarget("localhost",8080));
+        context.setTarget(new HttpTestTarget("127.0.0.1",8080));
 
         wireMockServer.resetAll();
     }
