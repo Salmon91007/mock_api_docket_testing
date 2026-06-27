@@ -15,7 +15,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 @Provider("OMS")
-@PactBroker(url = "http://localhost:9292")
+@PactBroker(
+        host = "127.0.0.1",
+        port = "9292"
+)
 
 public class OmsProviderVerificationTest {
 
@@ -24,10 +27,10 @@ public class OmsProviderVerificationTest {
     @BeforeAll
     static void startServer() {
 
-        wireMockServer = new WireMockServer(8080);
+        wireMockServer = new WireMockServer(4016);
         wireMockServer.start();
 
-        configureFor("127.0.0.1",8080);
+        configureFor("127.0.0.1",4016);
     }
 
     @AfterAll
@@ -38,22 +41,20 @@ public class OmsProviderVerificationTest {
     @BeforeEach
     void setup(PactVerificationContext context) {
 
-        context.setTarget(new HttpTestTarget("127.0.0.1",8080));
+        context.setTarget(new HttpTestTarget("127.0.0.1",wireMockServer.port()));
 
-        wireMockServer.resetAll();
+//        wireMockServer.resetAll();
     }
 
     @TestTemplate
     @ExtendWith(PactVerificationInvocationContextProvider.class)
     void verifyPact(PactVerificationContext context){
-
         context.verifyInteraction();
     }
 
 
 //    States
-
-    @State("Order with ID 1 exists")
+    @State("Order with ID 100 exists")
     public void orderExists(){
 
         wireMockServer.stubFor(get(urlEqualTo("/orders/100"))
@@ -66,6 +67,7 @@ public class OmsProviderVerificationTest {
                         }
                         """)));
     }
+
 
     @State("Order can be created")
     public void createOrder(){

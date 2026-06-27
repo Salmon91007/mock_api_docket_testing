@@ -33,7 +33,7 @@ jobs:
         run: |
           mvn -Dtest=PosOmsConsumerPactTest test
 
-      - name: 3. Consumer Publish Contracts to the Borker
+      - name: 3. Consumer Publish Contracts to the Broker
 
         run: |
           pact-broker publish target/pacts \
